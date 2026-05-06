@@ -115,8 +115,31 @@ const presets = [
     slug: "internal-admin",
     file: "internal-admin.DESIGN.md",
     title: "Internal Admin",
-    subtitle: "High-density admin system for records, permissions, audits, and support operations.",
-    nav: ["Records", "Users", "Permissions", "Audit"],
+    subtitle: "Mission-control internal admin UI inspired by World Monitor.",
+    nav: ["Global", "Signals", "Assets", "Audit"],
+    variant: "internal-admin",
+    previewTokens: {
+      canvas: "#0A0A0A",
+      surface: "#141414",
+      subtle: "#1E1E1E",
+      inverse: "#E8E8E8",
+      primaryText: "#E8E8E8",
+      secondaryText: "#C8C8C8",
+      mutedText: "#8A8A8A",
+      brandPrimary: "#16A34A",
+      brandHover: "#22C55E",
+      brandSecondary: "#4ADE80",
+      brandAccent: "#9AE6B4",
+      success: "#22C55E",
+      warning: "#FACC15",
+      danger: "#EF4444",
+      border: "#2A2A2A",
+      borderStrong: "#3A3A3A",
+      fontSans: "SF Mono, Monaco, Cascadia Code, Fira Code, ui-monospace, monospace",
+      fontMono: "SF Mono, Monaco, Cascadia Code, Fira Code, ui-monospace, monospace",
+      radius: "0px",
+      sidebar: "280px",
+    },
     metrics: [
       ["Pending reviews", "23", "-5"],
       ["Permission alerts", "4", "+1"],
@@ -181,6 +204,9 @@ function escapeHtml(value) {
 function previewHtml(preset, tokens) {
   if (preset.variant === "public-product") {
     return publicProductPreviewHtml(preset, tokens);
+  }
+  if (preset.variant === "internal-admin") {
+    return internalAdminPreviewHtml(preset, tokens);
   }
 
   const nav = preset.nav.map((item, index) => `<a class="${index === 0 ? "active" : ""}" href="#">${escapeHtml(item)}</a>`).join("");
@@ -487,6 +513,337 @@ function previewHtml(preset, tokens) {
       </section>
       <footer>Preview generated from <code>templates/design/${escapeHtml(preset.file)}</code>. Apply with <code>make apply-design DESIGN=templates/design/${escapeHtml(preset.file)}</code>.</footer>
     </main>
+  </div>
+</body>
+</html>`;
+}
+
+function internalAdminPreviewHtml(preset, tokens) {
+  const panels = [
+    ["CONFLICT FEED", "18", [["CRITICAL", "Border incident escalated", "2m"], ["ELEVATED", "Protest route changed", "9m"], ["INFO", "New source confirmed", "14m"]]],
+    ["INFRASTRUCTURE", "42", [["WARNING", "Power outage cluster", "4m"], ["LIVE", "Undersea cable stable", "11m"], ["INFO", "Port delay decreasing", "21m"]]],
+    ["AI BRIEF", "07", [["LIVE", "Daily synthesis ready", "now"], ["WARNING", "Low confidence item", "6m"], ["INFO", "435 sources scanned", "now"]]],
+    ["PERMISSIONS", "04", [["CRITICAL", "Export role pending", "3m"], ["WARNING", "Token rotation due", "1h"], ["LIVE", "Audit trail synced", "now"]]],
+    ["MARKETS", "31", [["ELEVATED", "Oil volatility spike", "12m"], ["INFO", "Crypto volume flat", "18m"], ["LIVE", "Commodities updated", "now"]]],
+    ["AUDIT LOG", "128", [["LIVE", "Policy diff reviewed", "1m"], ["INFO", "User session closed", "5m"], ["WARNING", "Failed login burst", "19m"]]],
+  ];
+  const panelHtml = panels.map(([title, count, rows]) => `
+    <section class="panel">
+      <header class="panel-header"><strong>${title}</strong><span>${count}</span></header>
+      <div class="panel-body">
+        ${rows.map(([severity, label, time]) => `<div class="signal ${severity.toLowerCase()}"><span>${severity}</span><p>${label}</p><time>${time}</time></div>`).join("")}
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>`).join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(preset.title)} DESIGN.md Preview</title>
+  <style>
+    :root {
+      --bg: ${tokens.canvas};
+      --surface: ${tokens.surface};
+      --subtle: ${tokens.subtle};
+      --text: ${tokens.primaryText};
+      --text-secondary: ${tokens.secondaryText};
+      --text-muted: ${tokens.mutedText};
+      --green: ${tokens.brandPrimary};
+      --green-hot: ${tokens.brandHover};
+      --accent: ${tokens.brandSecondary};
+      --yellow: ${tokens.warning};
+      --red: ${tokens.danger};
+      --orange: #f97316;
+      --blue: #38bdf8;
+      --border: ${tokens.border};
+      --border-strong: ${tokens.borderStrong};
+      --font: ${tokens.fontMono};
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .shell {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--bg);
+    }
+    .topbar {
+      height: 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .top-left, .top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .product {
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .02em;
+      white-space: nowrap;
+    }
+    .pill {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      background: var(--subtle);
+      color: var(--text-muted);
+      border-radius: 4px;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(34,197,94,.7);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .55; transform: scale(1.12); }
+    }
+    .main {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .map {
+      height: 50vh;
+      min-height: 240px;
+      border: 1px solid var(--border);
+      background: #020a08;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .map-bar {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+    .map-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(10,42,32,.72) 0%, rgba(2,10,8,1) 70%),
+        linear-gradient(rgba(34,197,94,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,.07) 1px, transparent 1px);
+      background-size: auto, 48px 48px, 48px 48px;
+    }
+    .map-body::before {
+      content: "";
+      position: absolute;
+      inset: 10% 16%;
+      border: 1px solid rgba(34,197,94,.22);
+      border-radius: 50%;
+      transform: rotate(-8deg);
+      box-shadow: inset 0 0 60px rgba(34,197,94,.06), 0 0 60px rgba(34,197,94,.05);
+    }
+    .track {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green-hot);
+      box-shadow: 0 0 16px rgba(34,197,94,.8);
+    }
+    .track.red { background: var(--red); box-shadow: 0 0 16px rgba(239,68,68,.8); }
+    .track.yellow { background: var(--yellow); box-shadow: 0 0 16px rgba(250,204,21,.8); }
+    .track.one { left: 32%; top: 44%; }
+    .track.two { left: 61%; top: 38%; }
+    .track.three { left: 48%; top: 62%; }
+    .legend {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+      background: rgba(20,20,20,.84);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+    .legend div { display: flex; align-items: center; gap: 6px; }
+    .panels {
+      flex: 1;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 4px;
+      padding: 4px;
+      align-content: start;
+      background: var(--bg);
+    }
+    .panel {
+      min-height: 300px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-header {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .panel-header strong {
+      font-size: 11px;
+      letter-spacing: .05em;
+    }
+    .panel-header span {
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+    .panel-body {
+      flex: 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .signal {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) 34px;
+      gap: 8px;
+      align-items: baseline;
+      padding: 7px 8px;
+      background: rgba(255,255,255,.025);
+      border-left: 3px solid var(--border-strong);
+    }
+    .signal span {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .signal p {
+      margin: 0;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .signal time {
+      color: var(--text-muted);
+      font-size: 10px;
+      text-align: right;
+    }
+    .signal.critical { border-left-color: var(--red); }
+    .signal.critical span { color: var(--red); }
+    .signal.warning { border-left-color: var(--yellow); }
+    .signal.warning span { color: var(--yellow); }
+    .signal.elevated { border-left-color: var(--orange); }
+    .signal.elevated span { color: var(--orange); }
+    .signal.live { border-left-color: var(--green); }
+    .signal.live span { color: var(--green-hot); }
+    .signal.info { border-left-color: var(--blue); }
+    .signal.info span { color: var(--blue); }
+    .skeleton-line {
+      height: 14px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .w85 { width: 85%; }
+    .w60 { width: 60%; }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    footer {
+      height: 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 10px;
+      background: var(--surface);
+    }
+    code { color: var(--accent); }
+    @media (max-width: 760px) {
+      body { overflow: auto; height: auto; }
+      .shell { min-height: 100vh; height: auto; }
+      .topbar { height: auto; align-items: flex-start; gap: 8px; }
+      .top-right { display: none; }
+      .map { height: 360px; }
+      .panels { overflow: visible; grid-template-columns: 1fr; }
+      footer { height: auto; padding: 10px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="top-left">
+        <strong class="product">WORLD ADMIN</strong>
+        <span class="pill">GLOBAL</span>
+        <span class="dot" aria-label="Live"></span>
+        <span class="pill">21 LANG</span>
+      </div>
+      <div class="top-right">
+        <span class="pill">SEARCH</span>
+        <span class="pill">SETTINGS</span>
+        <span class="pill">PRO</span>
+      </div>
+    </header>
+    <main class="main">
+      <section class="map">
+        <div class="map-bar"><span>MAP / LIVE LAYERS</span><span>435 SOURCES · 45 LAYERS · UPDATED NOW</span></div>
+        <div class="map-body">
+          <span class="track one"></span>
+          <span class="track red two"></span>
+          <span class="track yellow three"></span>
+          <div class="legend">
+            <div><span class="dot"></span> live normal</div>
+            <div><span class="dot" style="background:var(--yellow)"></span> elevated</div>
+            <div><span class="dot" style="background:var(--red)"></span> critical</div>
+          </div>
+        </div>
+      </section>
+      <section class="panels">${panelHtml}</section>
+    </main>
+    <footer>Preview generated from <code>templates/design/${escapeHtml(preset.file)}</code>. Apply with <code>make apply-design DESIGN=templates/design/${escapeHtml(preset.file)}</code>.</footer>
   </div>
 </body>
 </html>`;

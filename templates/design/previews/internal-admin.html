@@ -6,290 +6,353 @@
   <title>Internal Admin DESIGN.md Preview</title>
   <style>
     :root {
-      --canvas: #F5F6F8;
-      --surface: #FFFFFF;
-      --subtle: #EDEFF3;
-      --inverse: #151B26;
-      --text: #151B26;
-      --text-secondary: #454F5F;
-      --text-muted: #697386;
-      --primary: #151B26;
-      --primary-hover: #293F8F;
-      --secondary: #454F5F;
-      --accent: #A45D00;
-      --success: #237A45;
-      --warning: #A45D00;
-      --danger: #B42318;
-      --border: #D5DAE3;
-      --border-strong: #A8B0BF;
-      --radius: 16px;
-      --sidebar: 260px;
-      --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-      --font-mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace;
+      --bg: #0A0A0A;
+      --surface: #141414;
+      --subtle: #1E1E1E;
+      --text: #E8E8E8;
+      --text-secondary: #C8C8C8;
+      --text-muted: #8A8A8A;
+      --green: #16A34A;
+      --green-hot: #22C55E;
+      --accent: #4ADE80;
+      --yellow: #FACC15;
+      --red: #EF4444;
+      --orange: #f97316;
+      --blue: #38bdf8;
+      --border: #2A2A2A;
+      --border-strong: #3A3A3A;
+      --font: SF Mono, Monaco, Cascadia Code, Fira Code, ui-monospace, monospace;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: var(--canvas);
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
       color: var(--text);
-      font-family: var(--font-sans);
-      line-height: 1.5;
+      font-family: var(--font);
+      font-size: 12px;
+      line-height: 1.45;
     }
-    .preview-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(220px, var(--sidebar)) 1fr;
-    }
-    aside {
-      background: var(--inverse);
-      color: white;
-      padding: 24px;
+    .shell {
       display: flex;
       flex-direction: column;
-      gap: 24px;
-    }
-    .brand {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      font-weight: 700;
-    }
-    .brand-mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: var(--primary);
-      display: grid;
-      place-items: center;
-      color: white;
-      font-weight: 800;
-    }
-    nav {
-      display: grid;
-      gap: 6px;
-    }
-    nav a {
-      color: rgba(255,255,255,.78);
-      text-decoration: none;
-      padding: 10px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    nav a.active {
-      background: rgba(255,255,255,.12);
-      color: white;
-    }
-    main {
-      padding: 28px;
-      display: grid;
-      gap: 24px;
+      height: 100vh;
+      background: var(--bg);
     }
     .topbar {
+      height: 40px;
+      flex-shrink: 0;
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-    }
-    h1 {
-      margin: 0;
-      font-size: clamp(28px, 4vw, 42px);
-      line-height: 1.1;
-      letter-spacing: 0;
-    }
-    .subtitle {
-      margin: 8px 0 0;
-      color: var(--text-secondary);
-      max-width: 720px;
-    }
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    button {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
+      padding: 8px 16px;
       background: var(--surface);
-      color: var(--text);
-      font: inherit;
-      font-weight: 600;
-    }
-    button.primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .metric, .panel, .table-wrap, .tokens {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 24px rgba(17,24,39,.06);
-    }
-    .metric {
-      padding: 18px;
-      display: grid;
-      gap: 4px;
-    }
-    .metric span {
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-    .metric strong {
-      font-size: 30px;
-      line-height: 1.1;
-    }
-    .metric em {
-      color: var(--secondary);
-      font-style: normal;
-      font-size: 13px;
-      font-weight: 700;
-    }
-    .content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
-      gap: 18px;
-      align-items: start;
-    }
-    .table-wrap {
-      overflow: hidden;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
       border-bottom: 1px solid var(--border);
+    }
+    .top-left, .top-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .product {
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .02em;
       white-space: nowrap;
     }
-    th {
-      background: var(--subtle);
-      color: var(--text-secondary);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    tr:last-child td { border-bottom: 0; }
-    .status {
-      font-weight: 700;
-    }
-    .status-0 { color: var(--primary); }
-    .status-1 { color: var(--warning); }
-    .status-2 { color: var(--success); }
-    .panel {
-      padding: 20px;
-      display: grid;
-      gap: 14px;
-    }
-    .panel h2, .tokens h2 {
-      margin: 0;
-      font-size: 18px;
-    }
-    .panel p {
-      margin: 0;
-      color: var(--text-secondary);
-    }
-    .ai-box {
+    .pill {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
       border: 1px solid var(--border);
       background: var(--subtle);
-      border-radius: 8px;
-      padding: 14px;
+      color: var(--text-muted);
+      border-radius: 4px;
+      font-size: 10px;
+      white-space: nowrap;
     }
-    .tokens {
-      padding: 18px;
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 16px rgba(34,197,94,.7);
+      animation: pulse 1.8s ease-in-out infinite;
     }
-    .swatches {
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .55; transform: scale(1.12); }
+    }
+    .main {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .map {
+      height: 50vh;
+      min-height: 240px;
+      border: 1px solid var(--border);
+      background: #020a08;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+    }
+    .map-bar {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+    .map-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(10,42,32,.72) 0%, rgba(2,10,8,1) 70%),
+        linear-gradient(rgba(34,197,94,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,.07) 1px, transparent 1px);
+      background-size: auto, 48px 48px, 48px 48px;
+    }
+    .map-body::before {
+      content: "";
+      position: absolute;
+      inset: 10% 16%;
+      border: 1px solid rgba(34,197,94,.22);
+      border-radius: 50%;
+      transform: rotate(-8deg);
+      box-shadow: inset 0 0 60px rgba(34,197,94,.06), 0 0 60px rgba(34,197,94,.05);
+    }
+    .track {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green-hot);
+      box-shadow: 0 0 16px rgba(34,197,94,.8);
+    }
+    .track.red { background: var(--red); box-shadow: 0 0 16px rgba(239,68,68,.8); }
+    .track.yellow { background: var(--yellow); box-shadow: 0 0 16px rgba(250,204,21,.8); }
+    .track.one { left: 32%; top: 44%; }
+    .track.two { left: 61%; top: 38%; }
+    .track.three { left: 48%; top: 62%; }
+    .legend {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
       display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      gap: 6px;
+      padding: 10px;
+      background: rgba(20,20,20,.84);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 10px;
     }
-    .swatch {
-      min-height: 64px;
-      border-radius: 8px;
+    .legend div { display: flex; align-items: center; gap: 6px; }
+    .panels {
+      flex: 1;
+      overflow: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 4px;
+      padding: 4px;
+      align-content: start;
+      background: var(--bg);
+    }
+    .panel {
+      min-height: 300px;
+      background: var(--surface);
       border: 1px solid var(--border);
       display: flex;
-      align-items: end;
-      padding: 8px;
+      flex-direction: column;
+    }
+    .panel-header {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .panel-header strong {
       font-size: 11px;
-      color: white;
-      font-family: var(--font-mono);
-      overflow-wrap: anywhere;
+      letter-spacing: .05em;
     }
-    .swatch.light { color: var(--text); }
-    footer {
+    .panel-header span {
+      font-variant-numeric: tabular-nums;
+      color: var(--accent);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+    }
+    .panel-body {
+      flex: 1;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .signal {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr) 34px;
+      gap: 8px;
+      align-items: baseline;
+      padding: 7px 8px;
+      background: rgba(255,255,255,.025);
+      border-left: 3px solid var(--border-strong);
+    }
+    .signal span {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+    .signal p {
+      margin: 0;
+      color: var(--text-secondary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .signal time {
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 10px;
+      text-align: right;
     }
-    @media (max-width: 860px) {
-      .preview-shell { grid-template-columns: 1fr; }
-      aside { position: static; }
-      .topbar, .content-grid { grid-template-columns: 1fr; display: grid; }
-      .actions { justify-content: start; }
-      .metrics, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      table { min-width: 620px; }
-      .table-wrap { overflow-x: auto; }
+    .signal.critical { border-left-color: var(--red); }
+    .signal.critical span { color: var(--red); }
+    .signal.warning { border-left-color: var(--yellow); }
+    .signal.warning span { color: var(--yellow); }
+    .signal.elevated { border-left-color: var(--orange); }
+    .signal.elevated span { color: var(--orange); }
+    .signal.live { border-left-color: var(--green); }
+    .signal.live span { color: var(--green-hot); }
+    .signal.info { border-left-color: var(--blue); }
+    .signal.info span { color: var(--blue); }
+    .skeleton-line {
+      height: 14px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .w85 { width: 85%; }
+    .w60 { width: 60%; }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    footer {
+      height: 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 10px;
+      background: var(--surface);
+    }
+    code { color: var(--accent); }
+    @media (max-width: 760px) {
+      body { overflow: auto; height: auto; }
+      .shell { min-height: 100vh; height: auto; }
+      .topbar { height: auto; align-items: flex-start; gap: 8px; }
+      .top-right { display: none; }
+      .map { height: 360px; }
+      .panels { overflow: visible; grid-template-columns: 1fr; }
+      footer { height: auto; padding: 10px; text-align: center; }
     }
   </style>
 </head>
 <body>
-  <div class="preview-shell">
-    <aside>
-      <div class="brand"><div class="brand-mark">AI</div><span>Internal Admin</span></div>
-      <nav><a class="active" href="#">Records</a><a class="" href="#">Users</a><a class="" href="#">Permissions</a><a class="" href="#">Audit</a></nav>
-    </aside>
-    <main>
-      <section class="topbar">
-        <div>
-          <h1>Internal Admin</h1>
-          <p class="subtitle">High-density admin system for records, permissions, audits, and support operations.</p>
-        </div>
-        <div class="actions">
-          <button>Export</button>
-          <button class="primary">Review AI Output</button>
-        </div>
-      </section>
-      <section class="metrics"><section class="metric"><span>Pending reviews</span><strong>23</strong><em>-5</em></section><section class="metric"><span>Permission alerts</span><strong>4</strong><em>+1</em></section><section class="metric"><span>Audit events</span><strong>1,284</strong><em>24h</em></section></section>
-      <section class="content-grid">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Record</th><th>Permission</th><th>Risk</th><th>Action</th></tr></thead>
-            <tbody><tr><td>User 1842</td><td>Billing admin</td><td class="status status-0">Medium</td><td>Review access</td></tr><tr><td>Team Cortex</td><td>Export data</td><td class="status status-1">High</td><td>Require approval</td></tr><tr><td>Case 8841</td><td>Support view</td><td class="status status-2">Low</td><td>Archive</td></tr></tbody>
-          </table>
-        </div>
-        <aside class="panel">
-          <h2>Privileged Action</h2>
-          <div class="ai-box">
-            <p>AI can draft the access change, but the exact diff must be confirmed before applying.</p>
+  <div class="shell">
+    <header class="topbar">
+      <div class="top-left">
+        <strong class="product">WORLD ADMIN</strong>
+        <span class="pill">GLOBAL</span>
+        <span class="dot" aria-label="Live"></span>
+        <span class="pill">21 LANG</span>
+      </div>
+      <div class="top-right">
+        <span class="pill">SEARCH</span>
+        <span class="pill">SETTINGS</span>
+        <span class="pill">PRO</span>
+      </div>
+    </header>
+    <main class="main">
+      <section class="map">
+        <div class="map-bar"><span>MAP / LIVE LAYERS</span><span>435 SOURCES · 45 LAYERS · UPDATED NOW</span></div>
+        <div class="map-body">
+          <span class="track one"></span>
+          <span class="track red two"></span>
+          <span class="track yellow three"></span>
+          <div class="legend">
+            <div><span class="dot"></span> live normal</div>
+            <div><span class="dot" style="background:var(--yellow)"></span> elevated</div>
+            <div><span class="dot" style="background:var(--red)"></span> critical</div>
           </div>
-          <button class="primary">Accept after review</button>
-          <button>Regenerate</button>
-        </aside>
-      </section>
-      <section class="tokens">
-        <h2>Token Preview</h2>
-        <div class="swatches">
-          <div class="swatch light" style="background: var(--surface)">surface</div>
-          <div class="swatch light" style="background: var(--subtle)">subtle</div>
-          <div class="swatch" style="background: var(--inverse)">inverse</div>
-          <div class="swatch" style="background: var(--primary)">primary</div>
-          <div class="swatch" style="background: var(--secondary)">secondary</div>
-          <div class="swatch" style="background: var(--accent)">accent</div>
-          <div class="swatch" style="background: var(--success)">success</div>
-          <div class="swatch" style="background: var(--danger)">danger</div>
         </div>
       </section>
-      <footer>Preview generated from <code>templates/design/internal-admin.DESIGN.md</code>. Apply with <code>make apply-design DESIGN=templates/design/internal-admin.DESIGN.md</code>.</footer>
+      <section class="panels">
+    <section class="panel">
+      <header class="panel-header"><strong>CONFLICT FEED</strong><span>18</span></header>
+      <div class="panel-body">
+        <div class="signal critical"><span>CRITICAL</span><p>Border incident escalated</p><time>2m</time></div><div class="signal elevated"><span>ELEVATED</span><p>Protest route changed</p><time>9m</time></div><div class="signal info"><span>INFO</span><p>New source confirmed</p><time>14m</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-header"><strong>INFRASTRUCTURE</strong><span>42</span></header>
+      <div class="panel-body">
+        <div class="signal warning"><span>WARNING</span><p>Power outage cluster</p><time>4m</time></div><div class="signal live"><span>LIVE</span><p>Undersea cable stable</p><time>11m</time></div><div class="signal info"><span>INFO</span><p>Port delay decreasing</p><time>21m</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-header"><strong>AI BRIEF</strong><span>07</span></header>
+      <div class="panel-body">
+        <div class="signal live"><span>LIVE</span><p>Daily synthesis ready</p><time>now</time></div><div class="signal warning"><span>WARNING</span><p>Low confidence item</p><time>6m</time></div><div class="signal info"><span>INFO</span><p>435 sources scanned</p><time>now</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-header"><strong>PERMISSIONS</strong><span>04</span></header>
+      <div class="panel-body">
+        <div class="signal critical"><span>CRITICAL</span><p>Export role pending</p><time>3m</time></div><div class="signal warning"><span>WARNING</span><p>Token rotation due</p><time>1h</time></div><div class="signal live"><span>LIVE</span><p>Audit trail synced</p><time>now</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-header"><strong>MARKETS</strong><span>31</span></header>
+      <div class="panel-body">
+        <div class="signal elevated"><span>ELEVATED</span><p>Oil volatility spike</p><time>12m</time></div><div class="signal info"><span>INFO</span><p>Crypto volume flat</p><time>18m</time></div><div class="signal live"><span>LIVE</span><p>Commodities updated</p><time>now</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-header"><strong>AUDIT LOG</strong><span>128</span></header>
+      <div class="panel-body">
+        <div class="signal live"><span>LIVE</span><p>Policy diff reviewed</p><time>1m</time></div><div class="signal info"><span>INFO</span><p>User session closed</p><time>5m</time></div><div class="signal warning"><span>WARNING</span><p>Failed login burst</p><time>19m</time></div>
+        <div class="skeleton-line w85"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </section></section>
     </main>
+    <footer>Preview generated from <code>templates/design/internal-admin.DESIGN.md</code>. Apply with <code>make apply-design DESIGN=templates/design/internal-admin.DESIGN.md</code>.</footer>
   </div>
 </body>
 </html>

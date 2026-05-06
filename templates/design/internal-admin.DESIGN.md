@@ -1,55 +1,63 @@
 ---
 design_system:
   name: "Internal Admin"
-  version: "1.0.0"
+  version: "1.1.0"
   status: "preset"
   format: "DESIGN.md"
-  intent: "High-density internal admin UI for permissions, records, operations, and support workflows."
+  inspiration: "worldmonitor.app"
+  intent: "Mission-control internal admin UI inspired by World Monitor: dark real-time dashboard, dense panels, map-first layout, terminal typography, and status-driven operations."
 tokens:
   color:
     background:
-      canvas: "#F5F6F8"
-      surface: "#FFFFFF"
-      subtle: "#EDEFF3"
-      inverse: "#151B26"
+      canvas: "#0A0A0A"
+      surface: "#141414"
+      subtle: "#1E1E1E"
+      map: "#020A08"
+      map_glow: "#0A2A20"
+      inverse: "#E8E8E8"
     text:
-      primary: "#151B26"
-      secondary: "#454F5F"
-      muted: "#697386"
-      inverse: "#FFFFFF"
+      primary: "#E8E8E8"
+      secondary: "#C8C8C8"
+      muted: "#8A8A8A"
+      faint: "#5F5F5F"
+      inverse: "#0A0A0A"
     brand:
-      primary: "#334EAC"
-      primary_hover: "#293F8F"
-      secondary: "#217C6F"
-      accent: "#A45D00"
+      primary: "#16A34A"
+      primary_hover: "#22C55E"
+      secondary: "#4ADE80"
+      accent: "#9AE6B4"
     semantic:
-      success: "#237A45"
-      warning: "#A45D00"
-      danger: "#B42318"
-      info: "#334EAC"
+      live: "#16A34A"
+      success: "#22C55E"
+      warning: "#FACC15"
+      danger: "#EF4444"
+      critical: "#FF3B30"
+      info: "#38BDF8"
+      elevated: "#F97316"
     border:
-      default: "#D5DAE3"
-      strong: "#A8B0BF"
-      focus: "#334EAC"
+      default: "#2A2A2A"
+      subtle: "#1A1A1A"
+      strong: "#3A3A3A"
+      focus: "#22C55E"
   typography:
     font_family:
-      sans: "Inter, ui-sans-serif, system-ui, sans-serif"
-      mono: "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
+      sans: "SF Mono, Monaco, Cascadia Code, Fira Code, DejaVu Sans Mono, Liberation Mono, ui-monospace, monospace"
+      mono: "SF Mono, Monaco, Cascadia Code, Fira Code, DejaVu Sans Mono, Liberation Mono, ui-monospace, monospace"
     scale:
-      xs: "11px"
-      sm: "12px"
-      base: "14px"
-      lg: "16px"
-      xl: "18px"
-      "2xl": "22px"
-      "3xl": "28px"
+      xs: "10px"
+      sm: "11px"
+      base: "12px"
+      lg: "14px"
+      xl: "16px"
+      "2xl": "20px"
+      "3xl": "24px"
     weight:
       regular: 400
       medium: 500
       semibold: 600
       bold: 700
     line_height:
-      tight: 1.25
+      tight: 1.2
       normal: 1.45
       relaxed: 1.6
   spacing:
@@ -63,20 +71,24 @@ tokens:
       6: "24px"
       8: "32px"
   radius:
-    sm: "4px"
-    md: "6px"
-    lg: "8px"
-    pill: "999px"
+    sm: "0px"
+    md: "2px"
+    lg: "4px"
+    pill: "4px"
   shadow:
-    sm: "0 1px 2px rgba(21, 27, 38, 0.06)"
-    md: "0 8px 22px rgba(21, 27, 38, 0.08)"
+    sm: "none"
+    md: "none"
+    glow: "0 0 20px rgba(34, 197, 94, 0.12)"
   layout:
-    content_max_width: "1440px"
+    content_max_width: "none"
     app_shell_min_width: "320px"
-    sidebar_width: "260px"
+    header_height: "40px"
+    map_height: "50vh"
+    panel_min_width: "280px"
+    panel_height: "320px"
   motion:
     duration_fast: "80ms"
-    duration_base: "140ms"
+    duration_base: "150ms"
     easing_standard: "cubic-bezier(0.2, 0, 0, 1)"
 ---
 
@@ -84,50 +96,96 @@ tokens:
 
 ## Design Intent
 
-Build a practical internal admin interface for high-volume operational work. Optimize for permissions, auditability, correctness, and speed.
+Build a real-time internal command center inspired by World Monitor: high-density intelligence panels, dark operational surfaces, map-first situational awareness, compact mono typography, status dots, and fast scanning.
+
+Use this preset for internal admin systems where operators monitor many live signals: incidents, infrastructure, risk, support operations, logistics, security events, audits, permissions, or AI agent activity.
 
 ## Product Principles
 
-- Prioritize data visibility and precise actions.
-- Make permissions and audit trails visible.
-- Reduce irreversible mistakes.
-- Prefer stable layouts over expressive motion.
+- Prioritize live situational awareness over visual polish.
+- Put the global/current state first: map, timeline, critical queue, or incident board.
+- Optimize for dense scanning, not storytelling.
+- Use status, severity, recency, and source metadata everywhere.
+- Keep layouts stable during live updates.
+- Prefer compact panels over large cards.
 
 ## UX Requirements
 
-- Every destructive or privileged action needs confirmation.
-- Audit-relevant changes need clear before/after visibility.
-- Permission errors must explain what access is missing.
-- Bulk actions need preview and result summaries.
+- Header must be compact, around `layout.header_height`.
+- Main screen should combine a primary live surface and a grid of panels.
+- Panels need titles, counters, timestamps, refresh/error states, and source metadata.
+- Critical items need severity color, text label, and clear action.
+- Real-time loading states should use skeletons or shimmer without layout shift.
+- Filters, regions, languages, variants, and settings should be compact controls.
+- Bulk or privileged admin actions require preview and confirmation.
 
 ## AI Product Requirements
 
-- AI can assist, summarize, and draft, but privileged actions require confirmation.
-- Generated admin changes must show exact diff before apply.
-- Logs should capture AI-assisted actions without leaking sensitive data.
+- AI synthesis panels must show source count, freshness, model/prompt version when relevant, and confidence or caveats.
+- Generated operational summaries must link back to underlying items.
+- AI must not auto-execute admin actions without human confirmation.
+- Logs should capture AI-assisted actions while avoiding sensitive data leakage.
 
 ## Accessibility
 
-- Dense tables remain keyboard navigable.
-- Focus order follows operational flow.
-- Status and permission states use text plus color.
+- Dense panels remain keyboard navigable.
+- Do not rely on red/green alone; pair severity colors with labels.
+- Focus states use `tokens.color.border.focus`.
+- Live regions should not spam screen readers; summarize updates.
+- Text must remain readable at small sizes.
 
 ## Layout Rules
 
-- Use navigation, tables, drawers, modals, and audit panels.
-- Keep controls close to affected data.
-- Avoid decorative or marketing-oriented sections.
+- Use a full-height application shell.
+- Header: 40px, dark surface, thin bottom border, compact controls.
+- Primary live area: map/board/timeline with dark green/black depth.
+- Panels grid: auto-fill columns with minimum width around `layout.panel_min_width`.
+- Panel borders are square or near-square; avoid soft marketing cards.
+- Panel headers are compact and separate from body with thin borders.
+- Use tabular numbers for counts, prices, latency, risk scores, and timestamps.
 
 ## Component Rules
 
-- Tables: compact density, sticky headers where useful, column alignment.
-- Drawers: use for details and audit history.
-- Modals: use for confirmation, not general navigation.
+### Header
+
+- Left: product/module name, region selector, live status dot.
+- Right: search, settings, account, upgrade/role indicator.
+- Use compact pills and no oversized buttons.
+
+### Map Or Situation Board
+
+- Dark base with subtle green radial glow.
+- Include a thin toolbar above the map.
+- Use overlays for selected region, live layers, or severity legend.
+
+### Panels
+
+- Background: `tokens.color.background.surface`.
+- Border: `tokens.color.border.default`.
+- Header height around 36px.
+- Body uses small text and tight spacing.
+- Lists and tables use thin dividers and hover states.
+
+### Severity
+
+- Critical: red.
+- Elevated: orange.
+- Warning: yellow.
+- Live/normal: green.
+- Info: blue.
+- Every colored indicator must include a text label.
+
+### Admin Actions
+
+- Destructive or privileged changes require confirmation.
+- Show before/after diff for permission and configuration changes.
+- Audit trails should be discoverable from the affected record.
 
 ## Design Review Checklist
 
-- Are dangerous actions protected?
-- Are permissions understandable?
-- Can users recover from mistakes?
-- Are audit details discoverable?
-
+- Does the first screen show live operational state?
+- Are panels dense but readable?
+- Are severity, source, freshness, and action visible?
+- Does live loading avoid layout shift?
+- Are privileged actions protected?
+- Can users trace AI summaries back to source items?
