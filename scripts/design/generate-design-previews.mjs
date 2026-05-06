@@ -72,8 +72,31 @@ const presets = [
     slug: "public-product",
     file: "public-product.DESIGN.md",
     title: "Public Product",
-    subtitle: "A polished public product experience with visible product value and clear conversion paths.",
-    nav: ["Product", "Use cases", "Pricing", "Docs"],
+    subtitle: "Dark premium public product experience inspired by Orizon Cyber visual codes.",
+    nav: ["Expertise", "Results", "Method", "Contact"],
+    variant: "public-product",
+    previewTokens: {
+      canvas: "#0A0E1A",
+      surface: "#111827",
+      subtle: "#1E293B",
+      inverse: "#FFFFFF",
+      primaryText: "#FFFFFF",
+      secondaryText: "#CBD5E1",
+      mutedText: "#94A3B8",
+      brandPrimary: "#716CB1",
+      brandHover: "#8B86C5",
+      brandSecondary: "#C084FC",
+      brandAccent: "#38BDF8",
+      success: "#34D399",
+      warning: "#FBBF24",
+      danger: "#F87171",
+      border: "rgba(51, 65, 85, 0.50)",
+      borderStrong: "rgba(113, 108, 177, 0.40)",
+      fontSans: "Inter, ui-sans-serif, system-ui, sans-serif",
+      fontMono: "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+      radius: "24px",
+      sidebar: "280px",
+    },
     metrics: [
       ["Tasks automated", "2.4M", "+31%"],
       ["Teams onboarded", "840", "+76"],
@@ -156,6 +179,10 @@ function escapeHtml(value) {
 }
 
 function previewHtml(preset, tokens) {
+  if (preset.variant === "public-product") {
+    return publicProductPreviewHtml(preset, tokens);
+  }
+
   const nav = preset.nav.map((item, index) => `<a class="${index === 0 ? "active" : ""}" href="#">${escapeHtml(item)}</a>`).join("");
   const metrics = preset.metrics
     .map(([label, value, delta]) => `<section class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><em>${escapeHtml(delta)}</em></section>`)
@@ -465,6 +492,410 @@ function previewHtml(preset, tokens) {
 </html>`;
 }
 
+function publicProductPreviewHtml(preset, tokens) {
+  const nav = preset.nav.map((item) => `<a href="#">${escapeHtml(item)}</a>`).join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(preset.title)} DESIGN.md Preview</title>
+  <style>
+    :root {
+      --canvas: ${tokens.canvas};
+      --surface: ${tokens.surface};
+      --subtle: ${tokens.subtle};
+      --text: ${tokens.primaryText};
+      --text-secondary: ${tokens.secondaryText};
+      --text-muted: ${tokens.mutedText};
+      --primary: ${tokens.brandPrimary};
+      --primary-hover: ${tokens.brandHover};
+      --secondary: ${tokens.brandSecondary};
+      --accent: ${tokens.brandAccent};
+      --success: ${tokens.success};
+      --warning: ${tokens.warning};
+      --danger: ${tokens.danger};
+      --border: ${tokens.border};
+      --border-strong: ${tokens.borderStrong};
+      --radius: ${tokens.radius};
+      --font-sans: ${tokens.fontSans};
+      --font-mono: ${tokens.fontMono};
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(113,108,177,.18), transparent 36rem),
+        linear-gradient(180deg, rgba(113,108,177,.05), transparent 26rem);
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 23, 42, .80);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid rgba(51, 65, 85, .5);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      height: 80px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(113,108,177,.18);
+      border: 1px solid rgba(113,108,177,.3);
+      color: var(--secondary);
+      font-weight: 900;
+    }
+    .logo span span { color: var(--secondary); }
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+    .links a:hover {
+      color: white;
+      background: rgba(255,255,255,.05);
+    }
+    .nav-cta, .primary-cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 16px 48px rgba(113,108,177,.22);
+    }
+    .primary-cta:hover, .nav-cta:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .secondary-cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 52px;
+      padding: 0 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(100,116,139,.5);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      background: transparent;
+    }
+    .secondary-cta:hover {
+      border-color: rgba(113,108,177,.5);
+      color: white;
+    }
+    .hero {
+      position: relative;
+      max-width: 896px;
+      margin: 0 auto;
+      padding: 88px 24px 80px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(113,108,177,.10);
+      border: 1px solid rgba(113,108,177,.22);
+      color: var(--primary-hover);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary-hover);
+      box-shadow: 0 0 24px rgba(139,134,197,.8);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      font-weight: 800;
+    }
+    h1 span { color: var(--primary-hover); }
+    .hero p {
+      max-width: 680px;
+      margin: 24px auto 0;
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 34px;
+      flex-wrap: wrap;
+    }
+    .primary-cta { min-height: 52px; padding: 0 30px; }
+    .section {
+      position: relative;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 44px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+    .section-header p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+    .card {
+      position: relative;
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, .58);
+      border: 1px solid rgba(51, 65, 85, .45);
+      box-shadow: 0 20px 60px rgba(0,0,0,.22);
+    }
+    .card:hover {
+      border-color: rgba(113,108,177,.38);
+    }
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(113,108,177,.12);
+      border: 1px solid rgba(113,108,177,.24);
+      color: var(--primary-hover);
+      margin-bottom: 18px;
+      font-weight: 900;
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+    .card p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .result-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 24px;
+      right: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,134,197,.8), transparent);
+    }
+    .result-badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(113,108,177,.10);
+      border: 1px solid rgba(113,108,177,.22);
+      color: var(--primary-hover);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .cta-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: center;
+      padding: 40px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, .66);
+      border: 1px solid rgba(113,108,177,.22);
+      overflow: hidden;
+    }
+    .cta-panel h2 { margin-bottom: 12px; }
+    .cta-panel p {
+      color: var(--text-muted);
+      margin: 0;
+    }
+    .tokens {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 48px 24px 84px;
+    }
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .swatch {
+      min-height: 72px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 10px;
+      display: flex;
+      align-items: end;
+      color: white;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    footer {
+      border-top: 1px solid rgba(51,65,85,.5);
+      color: var(--text-muted);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 13px;
+    }
+    code {
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+    @media (max-width: 860px) {
+      .nav-inner { height: auto; padding: 16px 20px; align-items: flex-start; }
+      .links { display: none; }
+      .nav-cta { display: none; }
+      .hero { padding-top: 64px; }
+      .grid { grid-template-columns: 1fr; }
+      .cta-panel { grid-template-columns: 1fr; padding: 28px; }
+      .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="#"><span class="logo-mark">O</span><span>Orizon<span>.sx</span></span></a>
+      <nav class="links">${nav}</nav>
+      <a class="nav-cta" href="#">Talk to an expert</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge"><span class="badge-dot"></span> Secure AI Product</div>
+      <h1>Your digital trust <span>cannot wait.</span></h1>
+      <p>Launch a public product experience that feels expert, resilient, and premium. The interface foregrounds proof, methodology, and human review for high-impact AI workflows.</p>
+      <div class="hero-actions">
+        <a class="primary-cta" href="#">Start a confidential review</a>
+        <a class="secondary-cta" href="#">Explore the method</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Expertise with visible proof</h2>
+        <p>Use translucent cards, compact icons, and concrete outcomes to support a premium public product narrative.</p>
+      </div>
+      <div class="grid">
+        <article class="card"><div class="icon">01</div><h3>Secure by design</h3><p>Design workflows around trust, review, consent, and operational resilience from the first screen.</p></article>
+        <article class="card"><div class="icon">02</div><h3>AI-assisted delivery</h3><p>Explain how AI improves speed or quality while keeping consequential actions under human control.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Measurable outcomes</h3><p>Pair public claims with case metrics, result badges, and a clear path to contact or onboarding.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Results that feel concrete</h2>
+        <p>Proof cards use small uppercase badges, subtle violet lines, and concise narrative.</p>
+      </div>
+      <div class="grid">
+        <article class="card result-card"><span class="result-badge">0 incidents</span><h3>Resilient launch</h3><p>Risk-focused onboarding reduced exposed surfaces before the first production release.</p></article>
+        <article class="card result-card"><span class="result-badge">ISO ready</span><h3>Audit preparation</h3><p>Controls, evidence, and owner responsibilities were mapped into a reviewable action plan.</p></article>
+        <article class="card result-card"><span class="result-badge">72h recovery</span><h3>Incident response</h3><p>Priority remediation restored critical workflows while preserving audit and learning context.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="cta-panel">
+        <div>
+          <div class="badge">In 2 days</div>
+          <h2>Run a focused product trust audit</h2>
+          <p>Review UX, AI claims, data handling, DNS, deployment, and recovery paths before public launch.</p>
+        </div>
+        <a class="primary-cta" href="#">Request audit</a>
+      </div>
+    </section>
+
+    <section class="tokens">
+      <div class="swatches">
+        <div class="swatch" style="background: var(--canvas)">canvas</div>
+        <div class="swatch" style="background: var(--surface)">surface</div>
+        <div class="swatch" style="background: var(--primary)">primary</div>
+        <div class="swatch" style="background: var(--primary-hover)">hover</div>
+        <div class="swatch" style="background: var(--secondary)">secondary</div>
+        <div class="swatch" style="background: var(--accent)">accent</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Preview generated from <code>templates/design/${escapeHtml(preset.file)}</code>. Apply with <code>make apply-design DESIGN=templates/design/${escapeHtml(preset.file)}</code>.</footer>
+</body>
+</html>`;
+}
+
 function indexHtml() {
   const links = presets
     .map((preset) => `<li><a href="./${preset.slug}.html">${preset.title}</a><span>${preset.subtitle}</span></li>`)
@@ -502,10 +933,9 @@ await mkdir(previewDir, { recursive: true });
 
 for (const preset of presets) {
   const markdown = await readFile(path.join(designDir, preset.file), "utf8");
-  const tokens = readTokens(extractFrontMatter(markdown));
+  const tokens = { ...readTokens(extractFrontMatter(markdown)), ...preset.previewTokens };
   await writeFile(path.join(previewDir, `${preset.slug}.html`), previewHtml(preset, tokens));
 }
 
 await writeFile(path.join(previewDir, "index.html"), indexHtml());
 console.log(`Generated ${presets.length} design previews in ${path.relative(rootDir, previewDir)}`);
-

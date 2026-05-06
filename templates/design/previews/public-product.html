@@ -6,28 +6,27 @@
   <title>Public Product DESIGN.md Preview</title>
   <style>
     :root {
-      --canvas: #FAFAFB;
-      --surface: #FFFFFF;
-      --subtle: #F0F3F7;
-      --inverse: #111827;
-      --text: #111827;
-      --text-secondary: #4B5563;
-      --text-muted: #6B7280;
-      --primary: #111827;
-      --primary-hover: #1E40AF;
-      --secondary: #4B5563;
-      --accent: #EA580C;
-      --success: #15803D;
-      --warning: #B45309;
-      --danger: #B91C1C;
-      --border: #DDE3EC;
-      --border-strong: #AEB8C8;
-      --radius: 18px;
-      --sidebar: 280px;
+      --canvas: #0A0E1A;
+      --surface: #111827;
+      --subtle: #1E293B;
+      --text: #FFFFFF;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --primary: #716CB1;
+      --primary-hover: #8B86C5;
+      --secondary: #C084FC;
+      --accent: #38BDF8;
+      --success: #34D399;
+      --warning: #FBBF24;
+      --danger: #F87171;
+      --border: rgba(51, 65, 85, 0.50);
+      --border-strong: rgba(113, 108, 177, 0.40);
+      --radius: 24px;
       --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
       --font-mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace;
     }
     * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       background: var(--canvas);
@@ -35,261 +34,366 @@
       font-family: var(--font-sans);
       line-height: 1.5;
     }
-    .preview-shell {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: minmax(220px, var(--sidebar)) 1fr;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(113,108,177,.18), transparent 36rem),
+        linear-gradient(180deg, rgba(113,108,177,.05), transparent 26rem);
     }
-    aside {
-      background: var(--inverse);
-      color: white;
-      padding: 24px;
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(15, 23, 42, .80);
+      backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid rgba(51, 65, 85, .5);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      height: 80px;
+      margin: 0 auto;
+      padding: 0 24px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
       gap: 24px;
     }
-    .brand {
+    .logo {
       display: flex;
-      gap: 12px;
       align-items: center;
-      font-weight: 700;
+      gap: 12px;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
     }
-    .brand-mark {
+    .logo-mark {
       width: 36px;
       height: 36px;
-      border-radius: 8px;
-      background: var(--primary);
+      border-radius: 12px;
       display: grid;
       place-items: center;
-      color: white;
-      font-weight: 800;
+      background: rgba(113,108,177,.18);
+      border: 1px solid rgba(113,108,177,.3);
+      color: var(--secondary);
+      font-weight: 900;
     }
-    nav {
-      display: grid;
-      gap: 6px;
-    }
-    nav a {
-      color: rgba(255,255,255,.78);
-      text-decoration: none;
-      padding: 10px 12px;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    nav a.active {
-      background: rgba(255,255,255,.12);
-      color: white;
-    }
-    main {
-      padding: 28px;
-      display: grid;
-      gap: 24px;
-    }
-    .topbar {
+    .logo span span { color: var(--secondary); }
+    .links {
       display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
+      align-items: center;
+      gap: 4px;
+    }
+    .links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 10px;
+    }
+    .links a:hover {
+      color: white;
+      background: rgba(255,255,255,.05);
+    }
+    .nav-cta, .primary-cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid var(--primary);
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 16px 48px rgba(113,108,177,.22);
+    }
+    .primary-cta:hover, .nav-cta:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .secondary-cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 52px;
+      padding: 0 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(100,116,139,.5);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      background: transparent;
+    }
+    .secondary-cta:hover {
+      border-color: rgba(113,108,177,.5);
+      color: white;
+    }
+    .hero {
+      position: relative;
+      max-width: 896px;
+      margin: 0 auto;
+      padding: 88px 24px 80px;
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(113,108,177,.10);
+      border: 1px solid rgba(113,108,177,.22);
+      color: var(--primary-hover);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary-hover);
+      box-shadow: 0 0 24px rgba(139,134,197,.8);
     }
     h1 {
       margin: 0;
-      font-size: clamp(28px, 4vw, 42px);
-      line-height: 1.1;
+      font-size: clamp(42px, 7vw, 72px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      font-weight: 800;
+    }
+    h1 span { color: var(--primary-hover); }
+    .hero p {
+      max-width: 680px;
+      margin: 24px auto 0;
+      color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 34px;
+      flex-wrap: wrap;
+    }
+    .primary-cta { min-height: 52px; padding: 0 30px; }
+    .section {
+      position: relative;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+    .section-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 44px;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 1.15;
       letter-spacing: 0;
     }
-    .subtitle {
-      margin: 8px 0 0;
-      color: var(--text-secondary);
-      max-width: 720px;
+    .section-header p {
+      color: var(--text-muted);
+      margin: 0;
     }
-    .actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    button {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
-      background: var(--surface);
-      color: var(--text);
-      font: inherit;
-      font-weight: 600;
-    }
-    button.primary {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: white;
-    }
-    .metrics {
+    .grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      gap: 24px;
     }
-    .metric, .panel, .table-wrap, .tokens {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 24px rgba(17,24,39,.06);
+    .card {
+      position: relative;
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, .58);
+      border: 1px solid rgba(51, 65, 85, .45);
+      box-shadow: 0 20px 60px rgba(0,0,0,.22);
     }
-    .metric {
-      padding: 18px;
+    .card:hover {
+      border-color: rgba(113,108,177,.38);
+    }
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
       display: grid;
-      gap: 4px;
+      place-items: center;
+      background: rgba(113,108,177,.12);
+      border: 1px solid rgba(113,108,177,.24);
+      color: var(--primary-hover);
+      margin-bottom: 18px;
+      font-weight: 900;
     }
-    .metric span {
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 16px;
+    }
+    .card p {
+      margin: 0;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 14px;
+      line-height: 1.65;
     }
-    .metric strong {
-      font-size: 30px;
-      line-height: 1.1;
+    .result-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 24px;
+      right: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,134,197,.8), transparent);
     }
-    .metric em {
-      color: var(--secondary);
-      font-style: normal;
-      font-size: 13px;
-      font-weight: 700;
+    .result-badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(113,108,177,.10);
+      border: 1px solid rgba(113,108,177,.22);
+      color: var(--primary-hover);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
     }
-    .content-grid {
+    .cta-panel {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
-      gap: 18px;
-      align-items: start;
-    }
-    .table-wrap {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 32px;
+      align-items: center;
+      padding: 40px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, .66);
+      border: 1px solid rgba(113,108,177,.22);
       overflow: hidden;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    th {
-      background: var(--subtle);
-      color: var(--text-secondary);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    tr:last-child td { border-bottom: 0; }
-    .status {
-      font-weight: 700;
-    }
-    .status-0 { color: var(--primary); }
-    .status-1 { color: var(--warning); }
-    .status-2 { color: var(--success); }
-    .panel {
-      padding: 20px;
-      display: grid;
-      gap: 14px;
-    }
-    .panel h2, .tokens h2 {
+    .cta-panel h2 { margin-bottom: 12px; }
+    .cta-panel p {
+      color: var(--text-muted);
       margin: 0;
-      font-size: 18px;
-    }
-    .panel p {
-      margin: 0;
-      color: var(--text-secondary);
-    }
-    .ai-box {
-      border: 1px solid var(--border);
-      background: var(--subtle);
-      border-radius: 8px;
-      padding: 14px;
     }
     .tokens {
-      padding: 18px;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 48px 24px 84px;
     }
     .swatches {
       display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px;
     }
     .swatch {
-      min-height: 64px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
+      min-height: 72px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 10px;
       display: flex;
       align-items: end;
-      padding: 8px;
-      font-size: 11px;
       color: white;
       font-family: var(--font-mono);
-      overflow-wrap: anywhere;
+      font-size: 11px;
     }
-    .swatch.light { color: var(--text); }
     footer {
+      border-top: 1px solid rgba(51,65,85,.5);
       color: var(--text-muted);
+      padding: 28px 24px;
+      text-align: center;
       font-size: 13px;
     }
+    code {
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
     @media (max-width: 860px) {
-      .preview-shell { grid-template-columns: 1fr; }
-      aside { position: static; }
-      .topbar, .content-grid { grid-template-columns: 1fr; display: grid; }
-      .actions { justify-content: start; }
-      .metrics, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      table { min-width: 620px; }
-      .table-wrap { overflow-x: auto; }
+      .nav-inner { height: auto; padding: 16px 20px; align-items: flex-start; }
+      .links { display: none; }
+      .nav-cta { display: none; }
+      .hero { padding-top: 64px; }
+      .grid { grid-template-columns: 1fr; }
+      .cta-panel { grid-template-columns: 1fr; padding: 28px; }
+      .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
 </head>
 <body>
-  <div class="preview-shell">
-    <aside>
-      <div class="brand"><div class="brand-mark">AI</div><span>Public Product</span></div>
-      <nav><a class="active" href="#">Product</a><a class="" href="#">Use cases</a><a class="" href="#">Pricing</a><a class="" href="#">Docs</a></nav>
-    </aside>
-    <main>
-      <section class="topbar">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="#"><span class="logo-mark">O</span><span>Orizon<span>.sx</span></span></a>
+      <nav class="links"><a href="#">Expertise</a><a href="#">Results</a><a href="#">Method</a><a href="#">Contact</a></nav>
+      <a class="nav-cta" href="#">Talk to an expert</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge"><span class="badge-dot"></span> Secure AI Product</div>
+      <h1>Your digital trust <span>cannot wait.</span></h1>
+      <p>Launch a public product experience that feels expert, resilient, and premium. The interface foregrounds proof, methodology, and human review for high-impact AI workflows.</p>
+      <div class="hero-actions">
+        <a class="primary-cta" href="#">Start a confidential review</a>
+        <a class="secondary-cta" href="#">Explore the method</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Expertise with visible proof</h2>
+        <p>Use translucent cards, compact icons, and concrete outcomes to support a premium public product narrative.</p>
+      </div>
+      <div class="grid">
+        <article class="card"><div class="icon">01</div><h3>Secure by design</h3><p>Design workflows around trust, review, consent, and operational resilience from the first screen.</p></article>
+        <article class="card"><div class="icon">02</div><h3>AI-assisted delivery</h3><p>Explain how AI improves speed or quality while keeping consequential actions under human control.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Measurable outcomes</h3><p>Pair public claims with case metrics, result badges, and a clear path to contact or onboarding.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Results that feel concrete</h2>
+        <p>Proof cards use small uppercase badges, subtle violet lines, and concise narrative.</p>
+      </div>
+      <div class="grid">
+        <article class="card result-card"><span class="result-badge">0 incidents</span><h3>Resilient launch</h3><p>Risk-focused onboarding reduced exposed surfaces before the first production release.</p></article>
+        <article class="card result-card"><span class="result-badge">ISO ready</span><h3>Audit preparation</h3><p>Controls, evidence, and owner responsibilities were mapped into a reviewable action plan.</p></article>
+        <article class="card result-card"><span class="result-badge">72h recovery</span><h3>Incident response</h3><p>Priority remediation restored critical workflows while preserving audit and learning context.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="cta-panel">
         <div>
-          <h1>Public Product</h1>
-          <p class="subtitle">A polished public product experience with visible product value and clear conversion paths.</p>
+          <div class="badge">In 2 days</div>
+          <h2>Run a focused product trust audit</h2>
+          <p>Review UX, AI claims, data handling, DNS, deployment, and recovery paths before public launch.</p>
         </div>
-        <div class="actions">
-          <button>Export</button>
-          <button class="primary">Review AI Output</button>
-        </div>
-      </section>
-      <section class="metrics"><section class="metric"><span>Tasks automated</span><strong>2.4M</strong><em>+31%</em></section><section class="metric"><span>Teams onboarded</span><strong>840</strong><em>+76</em></section><section class="metric"><span>Time saved</span><strong>18h</strong><em>weekly</em></section></section>
-      <section class="content-grid">
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Workflow</th><th>Before</th><th>After</th><th>Impact</th></tr></thead>
-            <tbody><tr><td>Lead research</td><td>Manual</td><td class="status status-0">AI-assisted</td><td>4x faster</td></tr><tr><td>Support triage</td><td>Reactive</td><td class="status status-1">Prioritized</td><td>38% faster</td></tr><tr><td>Reporting</td><td>Weekly</td><td class="status status-2">Live</td><td>Always current</td></tr></tbody>
-          </table>
-        </div>
-        <aside class="panel">
-          <h2>Product Preview</h2>
-          <div class="ai-box">
-            <p>A real workflow preview appears above the fold so users can inspect the product before signing up.</p>
-          </div>
-          <button class="primary">Accept after review</button>
-          <button>Regenerate</button>
-        </aside>
-      </section>
-      <section class="tokens">
-        <h2>Token Preview</h2>
-        <div class="swatches">
-          <div class="swatch light" style="background: var(--surface)">surface</div>
-          <div class="swatch light" style="background: var(--subtle)">subtle</div>
-          <div class="swatch" style="background: var(--inverse)">inverse</div>
-          <div class="swatch" style="background: var(--primary)">primary</div>
-          <div class="swatch" style="background: var(--secondary)">secondary</div>
-          <div class="swatch" style="background: var(--accent)">accent</div>
-          <div class="swatch" style="background: var(--success)">success</div>
-          <div class="swatch" style="background: var(--danger)">danger</div>
-        </div>
-      </section>
-      <footer>Preview generated from <code>templates/design/public-product.DESIGN.md</code>. Apply with <code>make apply-design DESIGN=templates/design/public-product.DESIGN.md</code>.</footer>
-    </main>
-  </div>
+        <a class="primary-cta" href="#">Request audit</a>
+      </div>
+    </section>
+
+    <section class="tokens">
+      <div class="swatches">
+        <div class="swatch" style="background: var(--canvas)">canvas</div>
+        <div class="swatch" style="background: var(--surface)">surface</div>
+        <div class="swatch" style="background: var(--primary)">primary</div>
+        <div class="swatch" style="background: var(--primary-hover)">hover</div>
+        <div class="swatch" style="background: var(--secondary)">secondary</div>
+        <div class="swatch" style="background: var(--accent)">accent</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Preview generated from <code>templates/design/public-product.DESIGN.md</code>. Apply with <code>make apply-design DESIGN=templates/design/public-product.DESIGN.md</code>.</footer>
 </body>
 </html>
