@@ -1,0 +1,28 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+vendor/
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+coverage/
+
+# Logs and caches
+*.log
+.cache/
+.pytest_cache/
+.turbo/
+
+# Local tooling
+.idea/
+.vscode/
+

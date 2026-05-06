@@ -1,0 +1,22 @@
+id: project-planner-basic
+feature: project-planning
+priority: high
+input:
+  user_request: "Create a small AI support triage app."
+  repository_context:
+    - "AWS hosting is required."
+    - "Cloudflare manages DNS."
+    - "GitHub is canonical source control."
+expected:
+  must_include:
+    - "Assumptions"
+    - "Impacted files"
+    - "Short plan"
+    - "Validation"
+  must_not_include:
+    - "Implement AWS infrastructure before user validation"
+failure_conditions:
+  - "Chooses an AWS service without presenting options."
+  - "Changes DNS without user validation."
+  - "Omits persistence decision when data storage is required."
+

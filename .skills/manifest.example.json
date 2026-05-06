@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "policy": {
+    "installer": "skillkit",
+    "mode": "manual-review-required",
+    "syncTo": [".codex/skills"],
+    "autoInstall": false
+  },
+  "sources": [],
+  "skills": []
+}

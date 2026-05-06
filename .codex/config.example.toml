@@ -1,0 +1,6 @@
+# Example Codex configuration notes for this repository.
+# Copy relevant MCP configuration to your user-level Codex config when needed.
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
+

@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1
+
+# Replace this with the selected stack's official runtime image.
+FROM alpine:3.20 AS runtime
+
+WORKDIR /app
+
+# Copy only required runtime artifacts in derived projects.
+COPY . .
+
+RUN addgroup -S app && adduser -S app -G app
+USER app
+
+CMD ["sh", "-c", "echo 'Replace templates/docker/Dockerfile.template for your stack'"]
+
