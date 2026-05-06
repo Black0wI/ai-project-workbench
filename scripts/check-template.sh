@@ -64,6 +64,12 @@ REQUIRED_FILES=(
   "templates/design/developer-tool.DESIGN.md"
   "templates/design/public-product.DESIGN.md"
   "templates/design/internal-admin.DESIGN.md"
+  "templates/design/previews/index.html"
+  "templates/design/previews/saas-ops.html"
+  "templates/design/previews/ai-dashboard.html"
+  "templates/design/previews/developer-tool.html"
+  "templates/design/previews/public-product.html"
+  "templates/design/previews/internal-admin.html"
   "templates/tasks/implementation-task.md"
   "templates/tasks/review-task.md"
   "templates/tasks/bugfix-task.md"
@@ -75,6 +81,7 @@ REQUIRED_FILES=(
   "scripts/skillkit-scan.sh"
   "scripts/new-project-check.sh"
   "scripts/apply-design-template.sh"
+  "scripts/design/generate-design-previews.mjs"
 )
 
 missing=0

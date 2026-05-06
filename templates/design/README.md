@@ -18,10 +18,21 @@ The root `DESIGN.md` is the active design contract. Presets are copied into the 
 
 ```bash
 make design-templates
+make design-previews
 make apply-design DESIGN=templates/design/saas-ops.DESIGN.md
 ```
 
 Applying a preset creates a timestamped backup of the current root `DESIGN.md`.
+
+## Preview
+
+Open the static preview index:
+
+```text
+templates/design/previews/index.html
+```
+
+Each preview is generated from `scripts/design/generate-design-previews.mjs`.
 
 ## Rules
 
@@ -29,4 +40,3 @@ Applying a preset creates a timestamped backup of the current root `DESIGN.md`.
 - Apply only one active design contract at a time.
 - Update tokens after applying to match the actual product brand.
 - Validate UI changes with `docs/checklists/design-review.md`.
-

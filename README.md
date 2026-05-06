@@ -140,6 +140,7 @@ make help
 make check
 make doctor
 make design-templates
+make design-previews
 make skills-scan
 ```
 

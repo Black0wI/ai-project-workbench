@@ -34,20 +34,27 @@ The root `DESIGN.md` is the active design contract. Presets in `templates/design
    make design-templates
    ```
 
-2. Review the candidate preset.
-3. Confirm the choice with the user when brand or major UX direction is affected.
-4. Apply the preset:
+2. Generate and inspect previews:
+
+   ```bash
+   make design-previews
+   ```
+
+   Open `templates/design/previews/index.html`.
+
+3. Review the candidate preset.
+4. Confirm the choice with the user when brand or major UX direction is affected.
+5. Apply the preset:
 
    ```bash
    make apply-design DESIGN=templates/design/saas-ops.DESIGN.md
    ```
 
-5. Update token values for the actual product brand.
-6. Review with `docs/checklists/design-review.md`.
+6. Update token values for the actual product brand.
+7. Review with `docs/checklists/design-review.md`.
 
 ## Safety Notes
 
 - Applying a preset backs up the current `DESIGN.md`.
 - Do not apply multiple presets at once.
 - Do not blindly replace project-specific accessibility, AI, or workflow rules.
-

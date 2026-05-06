@@ -173,6 +173,7 @@ make check
 make doctor
 make new-project-check
 make design-templates
+make design-previews
 make skills-scan
 ```
 

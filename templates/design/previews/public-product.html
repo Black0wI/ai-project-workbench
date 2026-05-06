@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Public Product DESIGN.md Preview</title>
+  <style>
+    :root {
+      --canvas: #FAFAFB;
+      --surface: #FFFFFF;
+      --subtle: #F0F3F7;
+      --inverse: #111827;
+      --text: #111827;
+      --text-secondary: #4B5563;
+      --text-muted: #6B7280;
+      --primary: #111827;
+      --primary-hover: #1E40AF;
+      --secondary: #4B5563;
+      --accent: #EA580C;
+      --success: #15803D;
+      --warning: #B45309;
+      --danger: #B91C1C;
+      --border: #DDE3EC;
+      --border-strong: #AEB8C8;
+      --radius: 18px;
+      --sidebar: 280px;
+      --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+      --font-mono: JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+    .preview-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(220px, var(--sidebar)) 1fr;
+    }
+    aside {
+      background: var(--inverse);
+      color: white;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-weight: 700;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+    }
+    nav {
+      display: grid;
+      gap: 6px;
+    }
+    nav a {
+      color: rgba(255,255,255,.78);
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    nav a.active {
+      background: rgba(255,255,255,.12);
+      color: white;
+    }
+    main {
+      padding: 28px;
+      display: grid;
+      gap: 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    button {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-weight: 600;
+    }
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .metric, .panel, .table-wrap, .tokens {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(17,24,39,.06);
+    }
+    .metric {
+      padding: 18px;
+      display: grid;
+      gap: 4px;
+    }
+    .metric span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .metric strong {
+      font-size: 30px;
+      line-height: 1.1;
+    }
+    .metric em {
+      color: var(--secondary);
+      font-style: normal;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .table-wrap {
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th {
+      background: var(--subtle);
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .status {
+      font-weight: 700;
+    }
+    .status-0 { color: var(--primary); }
+    .status-1 { color: var(--warning); }
+    .status-2 { color: var(--success); }
+    .panel {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .panel h2, .tokens h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .panel p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+    .ai-box {
+      border: 1px solid var(--border);
+      background: var(--subtle);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .tokens {
+      padding: 18px;
+    }
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .swatch {
+      min-height: 64px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: end;
+      padding: 8px;
+      font-size: 11px;
+      color: white;
+      font-family: var(--font-mono);
+      overflow-wrap: anywhere;
+    }
+    .swatch.light { color: var(--text); }
+    footer {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    @media (max-width: 860px) {
+      .preview-shell { grid-template-columns: 1fr; }
+      aside { position: static; }
+      .topbar, .content-grid { grid-template-columns: 1fr; display: grid; }
+      .actions { justify-content: start; }
+      .metrics, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { min-width: 620px; }
+      .table-wrap { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-shell">
+    <aside>
+      <div class="brand"><div class="brand-mark">AI</div><span>Public Product</span></div>
+      <nav><a class="active" href="#">Product</a><a class="" href="#">Use cases</a><a class="" href="#">Pricing</a><a class="" href="#">Docs</a></nav>
+    </aside>
+    <main>
+      <section class="topbar">
+        <div>
+          <h1>Public Product</h1>
+          <p class="subtitle">A polished public product experience with visible product value and clear conversion paths.</p>
+        </div>
+        <div class="actions">
+          <button>Export</button>
+          <button class="primary">Review AI Output</button>
+        </div>
+      </section>
+      <section class="metrics"><section class="metric"><span>Tasks automated</span><strong>2.4M</strong><em>+31%</em></section><section class="metric"><span>Teams onboarded</span><strong>840</strong><em>+76</em></section><section class="metric"><span>Time saved</span><strong>18h</strong><em>weekly</em></section></section>
+      <section class="content-grid">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Workflow</th><th>Before</th><th>After</th><th>Impact</th></tr></thead>
+            <tbody><tr><td>Lead research</td><td>Manual</td><td class="status status-0">AI-assisted</td><td>4x faster</td></tr><tr><td>Support triage</td><td>Reactive</td><td class="status status-1">Prioritized</td><td>38% faster</td></tr><tr><td>Reporting</td><td>Weekly</td><td class="status status-2">Live</td><td>Always current</td></tr></tbody>
+          </table>
+        </div>
+        <aside class="panel">
+          <h2>Product Preview</h2>
+          <div class="ai-box">
+            <p>A real workflow preview appears above the fold so users can inspect the product before signing up.</p>
+          </div>
+          <button class="primary">Accept after review</button>
+          <button>Regenerate</button>
+        </aside>
+      </section>
+      <section class="tokens">
+        <h2>Token Preview</h2>
+        <div class="swatches">
+          <div class="swatch light" style="background: var(--surface)">surface</div>
+          <div class="swatch light" style="background: var(--subtle)">subtle</div>
+          <div class="swatch" style="background: var(--inverse)">inverse</div>
+          <div class="swatch" style="background: var(--primary)">primary</div>
+          <div class="swatch" style="background: var(--secondary)">secondary</div>
+          <div class="swatch" style="background: var(--accent)">accent</div>
+          <div class="swatch" style="background: var(--success)">success</div>
+          <div class="swatch" style="background: var(--danger)">danger</div>
+        </div>
+      </section>
+      <footer>Preview generated from <code>templates/design/public-product.DESIGN.md</code>. Apply with <code>make apply-design DESIGN=templates/design/public-product.DESIGN.md</code>.</footer>
+    </main>
+  </div>
+</body>
+</html>

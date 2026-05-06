@@ -1,0 +1,511 @@
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const rootDir = path.resolve(__dirname, "../..");
+const designDir = path.join(rootDir, "templates/design");
+const previewDir = path.join(designDir, "previews");
+
+const presets = [
+  {
+    slug: "saas-ops",
+    file: "saas-ops.DESIGN.md",
+    title: "SaaS Ops",
+    subtitle: "Operations workspace for CRM, workflow, and backoffice teams.",
+    nav: ["Pipeline", "Accounts", "Tasks", "Reports"],
+    metrics: [
+      ["Open deals", "128", "+12%"],
+      ["SLA risk", "7", "-3"],
+      ["AI drafts", "34", "+8"],
+    ],
+    columns: ["Account", "Owner", "Status", "Next action"],
+    rows: [
+      ["Northstar Labs", "Maya", "Review", "Approve AI summary"],
+      ["Aster Finance", "Jon", "At risk", "Escalate renewal"],
+      ["Helio Systems", "Sam", "Active", "Send follow-up"],
+    ],
+    panelTitle: "AI Recommendation",
+    panelBody: "Prioritize Aster Finance. Contract activity dropped 42% and the renewal window closes in 9 days.",
+  },
+  {
+    slug: "ai-dashboard",
+    file: "ai-dashboard.DESIGN.md",
+    title: "AI Dashboard",
+    subtitle: "Trace, eval, quality, latency, and cost monitoring for AI systems.",
+    nav: ["Overview", "Traces", "Evals", "Prompts"],
+    metrics: [
+      ["Eval pass rate", "94.2%", "+2.1%"],
+      ["Avg latency", "1.8s", "-240ms"],
+      ["Cost / 1k", "$0.42", "-8%"],
+    ],
+    columns: ["Trace", "Model", "Eval", "Latency"],
+    rows: [
+      ["triage-8841", "gpt-5.4", "Pass", "1.6s"],
+      ["summary-2210", "gpt-5.4", "Warn", "2.2s"],
+      ["route-1092", "gpt-5.4-mini", "Pass", "840ms"],
+    ],
+    panelTitle: "Trace Evidence",
+    panelBody: "Prompt v12 improved grounding on support triage cases while reducing tool retries by 18%.",
+  },
+  {
+    slug: "developer-tool",
+    file: "developer-tool.DESIGN.md",
+    title: "Developer Tool",
+    subtitle: "Technical console for APIs, SDKs, logs, config, and generated code review.",
+    nav: ["Console", "API Keys", "Logs", "Docs"],
+    metrics: [
+      ["Requests", "42k", "+18%"],
+      ["Errors", "0.12%", "-0.04%"],
+      ["Deploys", "16", "+4"],
+    ],
+    columns: ["Endpoint", "Method", "Status", "P95"],
+    rows: [
+      ["/v1/agents/run", "POST", "200", "480ms"],
+      ["/v1/evals", "POST", "202", "620ms"],
+      ["/v1/traces/:id", "GET", "200", "90ms"],
+    ],
+    panelTitle: "Generated Config",
+    panelBody: "Review the proposed webhook config before applying. Secrets are masked and environment scoped.",
+  },
+  {
+    slug: "public-product",
+    file: "public-product.DESIGN.md",
+    title: "Public Product",
+    subtitle: "A polished public product experience with visible product value and clear conversion paths.",
+    nav: ["Product", "Use cases", "Pricing", "Docs"],
+    metrics: [
+      ["Tasks automated", "2.4M", "+31%"],
+      ["Teams onboarded", "840", "+76"],
+      ["Time saved", "18h", "weekly"],
+    ],
+    columns: ["Workflow", "Before", "After", "Impact"],
+    rows: [
+      ["Lead research", "Manual", "AI-assisted", "4x faster"],
+      ["Support triage", "Reactive", "Prioritized", "38% faster"],
+      ["Reporting", "Weekly", "Live", "Always current"],
+    ],
+    panelTitle: "Product Preview",
+    panelBody: "A real workflow preview appears above the fold so users can inspect the product before signing up.",
+  },
+  {
+    slug: "internal-admin",
+    file: "internal-admin.DESIGN.md",
+    title: "Internal Admin",
+    subtitle: "High-density admin system for records, permissions, audits, and support operations.",
+    nav: ["Records", "Users", "Permissions", "Audit"],
+    metrics: [
+      ["Pending reviews", "23", "-5"],
+      ["Permission alerts", "4", "+1"],
+      ["Audit events", "1,284", "24h"],
+    ],
+    columns: ["Record", "Permission", "Risk", "Action"],
+    rows: [
+      ["User 1842", "Billing admin", "Medium", "Review access"],
+      ["Team Cortex", "Export data", "High", "Require approval"],
+      ["Case 8841", "Support view", "Low", "Archive"],
+    ],
+    panelTitle: "Privileged Action",
+    panelBody: "AI can draft the access change, but the exact diff must be confirmed before applying.",
+  },
+];
+
+function extractFrontMatter(markdown) {
+  const match = markdown.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) throw new Error("Missing YAML front matter");
+  return match[1];
+}
+
+function getValue(yaml, key) {
+  const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = yaml.match(new RegExp(`${escaped}:\\s+"?([^"\\n]+)"?`));
+  return match?.[1]?.trim();
+}
+
+function readTokens(yaml) {
+  return {
+    canvas: getValue(yaml, "canvas") ?? "#F7F8FA",
+    surface: getValue(yaml, "surface") ?? "#FFFFFF",
+    subtle: getValue(yaml, "subtle") ?? "#EEF1F5",
+    inverse: getValue(yaml, "inverse") ?? "#111827",
+    primaryText: getValue(yaml, "primary") ?? "#111827",
+    secondaryText: getValue(yaml, "secondary") ?? "#4B5563",
+    mutedText: getValue(yaml, "muted") ?? "#6B7280",
+    brandPrimary: getValue(yaml, "primary_hover") ? getValue(yaml, "primary") : "#2563EB",
+    brandHover: getValue(yaml, "primary_hover") ?? "#1D4ED8",
+    brandSecondary: getValue(yaml, "secondary") ?? "#14B8A6",
+    brandAccent: getValue(yaml, "accent") ?? "#F59E0B",
+    success: getValue(yaml, "success") ?? "#16A34A",
+    warning: getValue(yaml, "warning") ?? "#D97706",
+    danger: getValue(yaml, "danger") ?? "#DC2626",
+    border: getValue(yaml, "default") ?? "#D8DEE8",
+    borderStrong: getValue(yaml, "strong") ?? "#AEB8C8",
+    fontSans: getValue(yaml, "sans") ?? "Inter, ui-sans-serif, system-ui, sans-serif",
+    fontMono: getValue(yaml, "mono") ?? "JetBrains Mono, ui-monospace, monospace",
+    radius: getValue(yaml, "lg") ?? "8px",
+    sidebar: getValue(yaml, "sidebar_width") ?? "280px",
+  };
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function previewHtml(preset, tokens) {
+  const nav = preset.nav.map((item, index) => `<a class="${index === 0 ? "active" : ""}" href="#">${escapeHtml(item)}</a>`).join("");
+  const metrics = preset.metrics
+    .map(([label, value, delta]) => `<section class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><em>${escapeHtml(delta)}</em></section>`)
+    .join("");
+  const headerCells = preset.columns.map((column) => `<th>${escapeHtml(column)}</th>`).join("");
+  const rows = preset.rows
+    .map((row, rowIndex) => `<tr>${row.map((cell, cellIndex) => {
+      const className = cellIndex === 2 ? ` class="status status-${rowIndex}"` : "";
+      return `<td${className}>${escapeHtml(cell)}</td>`;
+    }).join("")}</tr>`)
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(preset.title)} DESIGN.md Preview</title>
+  <style>
+    :root {
+      --canvas: ${tokens.canvas};
+      --surface: ${tokens.surface};
+      --subtle: ${tokens.subtle};
+      --inverse: ${tokens.inverse};
+      --text: ${tokens.primaryText};
+      --text-secondary: ${tokens.secondaryText};
+      --text-muted: ${tokens.mutedText};
+      --primary: ${tokens.brandPrimary};
+      --primary-hover: ${tokens.brandHover};
+      --secondary: ${tokens.brandSecondary};
+      --accent: ${tokens.brandAccent};
+      --success: ${tokens.success};
+      --warning: ${tokens.warning};
+      --danger: ${tokens.danger};
+      --border: ${tokens.border};
+      --border-strong: ${tokens.borderStrong};
+      --radius: ${tokens.radius};
+      --sidebar: ${tokens.sidebar};
+      --font-sans: ${tokens.fontSans};
+      --font-mono: ${tokens.fontMono};
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--canvas);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+    }
+    .preview-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(220px, var(--sidebar)) 1fr;
+    }
+    aside {
+      background: var(--inverse);
+      color: white;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-weight: 700;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--primary);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+    }
+    nav {
+      display: grid;
+      gap: 6px;
+    }
+    nav a {
+      color: rgba(255,255,255,.78);
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    nav a.active {
+      background: rgba(255,255,255,.12);
+      color: white;
+    }
+    main {
+      padding: 28px;
+      display: grid;
+      gap: 24px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    button {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-weight: 600;
+    }
+    button.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .metric, .panel, .table-wrap, .tokens {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(17,24,39,.06);
+    }
+    .metric {
+      padding: 18px;
+      display: grid;
+      gap: 4px;
+    }
+    .metric span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .metric strong {
+      font-size: 30px;
+      line-height: 1.1;
+    }
+    .metric em {
+      color: var(--secondary);
+      font-style: normal;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
+      gap: 18px;
+      align-items: start;
+    }
+    .table-wrap {
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th {
+      background: var(--subtle);
+      color: var(--text-secondary);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .status {
+      font-weight: 700;
+    }
+    .status-0 { color: var(--primary); }
+    .status-1 { color: var(--warning); }
+    .status-2 { color: var(--success); }
+    .panel {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .panel h2, .tokens h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .panel p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+    .ai-box {
+      border: 1px solid var(--border);
+      background: var(--subtle);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .tokens {
+      padding: 18px;
+    }
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .swatch {
+      min-height: 64px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: end;
+      padding: 8px;
+      font-size: 11px;
+      color: white;
+      font-family: var(--font-mono);
+      overflow-wrap: anywhere;
+    }
+    .swatch.light { color: var(--text); }
+    footer {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    @media (max-width: 860px) {
+      .preview-shell { grid-template-columns: 1fr; }
+      aside { position: static; }
+      .topbar, .content-grid { grid-template-columns: 1fr; display: grid; }
+      .actions { justify-content: start; }
+      .metrics, .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { min-width: 620px; }
+      .table-wrap { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-shell">
+    <aside>
+      <div class="brand"><div class="brand-mark">AI</div><span>${escapeHtml(preset.title)}</span></div>
+      <nav>${nav}</nav>
+    </aside>
+    <main>
+      <section class="topbar">
+        <div>
+          <h1>${escapeHtml(preset.title)}</h1>
+          <p class="subtitle">${escapeHtml(preset.subtitle)}</p>
+        </div>
+        <div class="actions">
+          <button>Export</button>
+          <button class="primary">Review AI Output</button>
+        </div>
+      </section>
+      <section class="metrics">${metrics}</section>
+      <section class="content-grid">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>${headerCells}</tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <aside class="panel">
+          <h2>${escapeHtml(preset.panelTitle)}</h2>
+          <div class="ai-box">
+            <p>${escapeHtml(preset.panelBody)}</p>
+          </div>
+          <button class="primary">Accept after review</button>
+          <button>Regenerate</button>
+        </aside>
+      </section>
+      <section class="tokens">
+        <h2>Token Preview</h2>
+        <div class="swatches">
+          <div class="swatch light" style="background: var(--surface)">surface</div>
+          <div class="swatch light" style="background: var(--subtle)">subtle</div>
+          <div class="swatch" style="background: var(--inverse)">inverse</div>
+          <div class="swatch" style="background: var(--primary)">primary</div>
+          <div class="swatch" style="background: var(--secondary)">secondary</div>
+          <div class="swatch" style="background: var(--accent)">accent</div>
+          <div class="swatch" style="background: var(--success)">success</div>
+          <div class="swatch" style="background: var(--danger)">danger</div>
+        </div>
+      </section>
+      <footer>Preview generated from <code>templates/design/${escapeHtml(preset.file)}</code>. Apply with <code>make apply-design DESIGN=templates/design/${escapeHtml(preset.file)}</code>.</footer>
+    </main>
+  </div>
+</body>
+</html>`;
+}
+
+function indexHtml() {
+  const links = presets
+    .map((preset) => `<li><a href="./${preset.slug}.html">${preset.title}</a><span>${preset.subtitle}</span></li>`)
+    .join("");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DESIGN.md Preset Previews</title>
+  <style>
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, sans-serif; background: #f7f8fa; color: #111827; }
+    main { max-width: 920px; margin: 0 auto; padding: 48px 20px; }
+    h1 { font-size: 42px; line-height: 1.1; margin: 0 0 12px; letter-spacing: 0; }
+    p { color: #4b5563; font-size: 18px; margin: 0 0 28px; }
+    ul { list-style: none; padding: 0; display: grid; gap: 12px; }
+    li { background: white; border: 1px solid #d8dee8; border-radius: 8px; padding: 18px; display: grid; gap: 6px; }
+    a { color: #2563eb; font-size: 18px; font-weight: 700; text-decoration: none; }
+    span { color: #6b7280; }
+    code { background: #eef1f5; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>DESIGN.md Preset Previews</h1>
+    <p>Static previews for the ready-to-use design presets in <code>templates/design</code>.</p>
+    <ul>${links}</ul>
+  </main>
+</body>
+</html>`;
+}
+
+await mkdir(previewDir, { recursive: true });
+
+for (const preset of presets) {
+  const markdown = await readFile(path.join(designDir, preset.file), "utf8");
+  const tokens = readTokens(extractFrontMatter(markdown));
+  await writeFile(path.join(previewDir, `${preset.slug}.html`), previewHtml(preset, tokens));
+}
+
+await writeFile(path.join(previewDir, "index.html"), indexHtml());
+console.log(`Generated ${presets.length} design previews in ${path.relative(rootDir, previewDir)}`);
+
