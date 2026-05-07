@@ -10,6 +10,162 @@ This repository is intentionally light on framework code. It gives every new pro
 
 Applications created from this workbench are expected to be hosted on AWS. The concrete AWS product is selected per project based on workload needs, with cost effectiveness as a primary criterion and explicit user validation before implementation. DNS is managed systematically through Cloudflare via API. Version control and collaboration are standardized on GitHub. When a relational database is required, PostgreSQL is the default engine.
 
+## Quickstart
+
+Use this flow to create a clean project from the template.
+
+### 1. Create The Repository
+
+On GitHub, click **Use this template** and create a new repository.
+
+Then clone it:
+
+```bash
+git clone https://github.com/<owner>/<new-project>.git
+cd <new-project>
+```
+
+### 2. Bootstrap Locally
+
+```bash
+make bootstrap
+make doctor
+make check
+```
+
+If `make doctor` reports missing `rg`, install ripgrep:
+
+```bash
+brew install ripgrep
+```
+
+### 3. Replace Template Identity
+
+Update at least:
+
+- `README.md`
+- `.env.example`
+- `AGENTS.md`
+- `DESIGN.md`
+- `docs/github/repository-metadata.md`
+
+Then run:
+
+```bash
+make new-project-check
+```
+
+This command is expected to fail until template names, slugs, and `TBD` values are replaced or intentionally resolved.
+
+### 4. Choose A Design Preset
+
+List presets:
+
+```bash
+make design-templates
+```
+
+Generate previews:
+
+```bash
+make design-previews
+```
+
+Open:
+
+```text
+templates/design/previews/index.html
+```
+
+Apply one preset:
+
+```bash
+make apply-design DESIGN=templates/design/public-product.DESIGN.md
+```
+
+Then adjust `DESIGN.md` tokens for the actual product.
+
+### 5. Create The First Spec
+
+```bash
+cp docs/specs/000-template.md docs/specs/001-initial-product.md
+```
+
+Fill in:
+
+- problem, goals, and non-goals
+- users and workflows
+- AI behavior, if applicable
+- data contracts
+- database and persistence
+- AWS deployment options
+- Cloudflare DNS needs
+- GitHub/release impact
+- acceptance criteria
+
+### 6. Record Key Decisions
+
+Create ADRs from:
+
+```bash
+cp docs/adr/0001-template.md docs/adr/0009-your-decision.md
+```
+
+Common early ADRs:
+
+- application stack
+- AWS service selection
+- PostgreSQL service: RDS or Aurora
+- IaC tool: OpenTofu/Terraform or approved alternative
+- DNS and domain strategy
+
+Infrastructure, DNS, database service, IaC, release, and GitHub governance choices must be proposed and user-approved before implementation.
+
+### 7. Optional Obsidian Context
+
+Keep the real vault outside the repository:
+
+```text
+/Users/jbm/Documents/Obsidian/Projects/<new-project>
+```
+
+Set locally:
+
+```bash
+OBSIDIAN_VAULT_PATH=/Users/jbm/Documents/Obsidian/Projects/<new-project>
+```
+
+Export reviewed context only:
+
+```bash
+make obsidian-export
+make context-check
+```
+
+### 8. Add The Application Stack
+
+Add the selected framework and update:
+
+- `Makefile`
+- `scripts/check-template.sh`
+- `.env.example`
+- `AGENTS.md`
+- `README.md`
+
+Keep commands Docker-compatible where possible.
+
+### 9. Validate And Commit
+
+```bash
+make check
+make context-check
+make skills-scan
+make new-project-check
+git add .
+git commit -m "Initialize project from AI workbench"
+git push
+```
+
 ## What This Template Provides
 
 - Codex-ready repository instructions in `AGENTS.md`
