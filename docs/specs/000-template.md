@@ -43,6 +43,23 @@ Use this section for model, prompt, agent, tool, or eval behavior. Remove if not
 - Failure modes:
 - Eval strategy:
 
+## Agent Execution Plan
+
+Use this section when implementation may involve multiple agents or parallel work.
+
+Parallelizable tasks:
+
+| Task | Agent type | Owned files/modules | Output | Risk |
+| --- | --- | --- | --- | --- |
+| Explore existing workflow | Explorer | Read-only | Findings | Low |
+| Implement isolated module | Worker | TBD | Patch | Medium |
+
+Main-agent critical path:
+
+Sub-agent non-goals:
+
+Integration and review plan:
+
 ## Data And Contracts
 
 Define API contracts, events, schemas, storage changes, and compatibility constraints.

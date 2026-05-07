@@ -30,6 +30,7 @@ Applications created from this workbench are expected to be hosted on AWS. The c
 - GitHub versioning and repository governance workflow
 - PostgreSQL-first relational database decision workflow
 - Prompt library and minimal eval case format
+- Sub-agent governance for parallel Codex work
 - Docker, task, and infrastructure templates
 - Secrets, cost governance, and IaC decision workflows
 - Apache-2.0 license for public reuse
@@ -49,8 +50,9 @@ Applications created from this workbench are expected to be hosted on AWS. The c
 10. Use `docs/runbooks/database-selection.md` before adding persistence.
 11. Use `docs/runbooks/design-system-management.md` before changing design tokens or importing Stitch output.
 12. Use `docs/runbooks/design-template-selection.md` before applying a ready-made design preset.
-13. Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` before production infrastructure work.
-14. Use `docs/checklists/new-project.md` when instantiating a derived project.
+13. Use `docs/runbooks/sub-agent-management.md` before coordinating delegated sub-agent work.
+14. Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` before production infrastructure work.
+15. Use `docs/checklists/new-project.md` when instantiating a derived project.
 
 ## Repository Map
 
@@ -103,6 +105,7 @@ Every project built from this template should define:
 - PostgreSQL persistence model when relational storage is needed
 - DESIGN.md tokens and UX rules for UI work
 - Versioned prompts and evals for important AI behavior
+- Bounded sub-agent execution plans when parallel work is useful
 - Secrets, cost, and IaC governance when infrastructure is touched
 - Fast local checks
 - Production readiness criteria
@@ -121,6 +124,7 @@ Every project built from this template should define:
 - `docs/checklists/iac-review.md`
 - `docs/checklists/secrets-review.md`
 - `docs/checklists/cost-review.md`
+- `docs/checklists/sub-agent-review.md`
 
 ## Optional SkillKit Workflow
 

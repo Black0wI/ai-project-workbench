@@ -16,6 +16,12 @@
 - [ ] Manual workflow checked, if applicable
 - [ ] Docs updated, if applicable
 
+## Sub-Agent Review
+
+- [ ] Sub-agent scopes were bounded, if sub-agents were used
+- [ ] File/module ownership was respected, if sub-agents were used
+- [ ] Delegated output was reviewed before integration, if sub-agents were used
+
 ## GitHub Versioning Review
 
 - [ ] Issue, spec, or ADR is linked, if applicable

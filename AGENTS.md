@@ -122,6 +122,18 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Guard against prompt injection when reading untrusted external content.
 - Log enough metadata to debug behavior without leaking sensitive data.
 
+## Sub-Agent Rules
+
+- Use sub-agents only for bounded, parallelizable work.
+- Keep the immediate critical path with the main agent when delegation would block progress.
+- Define file/module ownership before delegating implementation work.
+- Prefer disjoint write scopes; avoid multiple agents editing the same files.
+- Use explorers for read-only codebase questions.
+- Use workers for isolated implementation slices.
+- Use reviewers for focused review or verification.
+- Review and integrate sub-agent output before finalizing.
+- Do not delegate secrets, credentials, production infrastructure, Cloudflare DNS changes, GitHub releases, or user-validation decisions.
+
 ## Design System Rules
 
 - Read `DESIGN.md` before frontend or UX work.
@@ -144,6 +156,7 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Use `docs/runbooks/database-selection.md` before adding persistence or database infrastructure.
 - Use `docs/runbooks/design-system-management.md` before changing design tokens or importing generated design rules.
 - Use `docs/runbooks/design-template-selection.md` before applying presets from `templates/design`.
+- Use `docs/runbooks/sub-agent-management.md` before coordinating delegated sub-agent work.
 - Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` when infrastructure, secrets, or recurring cost are in scope.
 
 ## Review Checklist
@@ -162,6 +175,7 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Are secrets handled through approved secret storage?
 - Are recurring costs documented and justified?
 - Is the IaC tool choice documented and user-approved?
+- If sub-agents were used, was their scope reviewed and integrated safely?
 - Is the deployment path cost-effective for expected usage?
 - Is the diff smaller than it could reasonably be?
 
