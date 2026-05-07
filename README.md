@@ -31,6 +31,7 @@ Applications created from this workbench are expected to be hosted on AWS. The c
 - PostgreSQL-first relational database decision workflow
 - Prompt library and minimal eval case format
 - Sub-agent governance for parallel Codex work
+- Optional Obsidian context workflow for local knowledge management
 - Docker, task, and infrastructure templates
 - Secrets, cost governance, and IaC decision workflows
 - Apache-2.0 license for public reuse
@@ -51,8 +52,9 @@ Applications created from this workbench are expected to be hosted on AWS. The c
 11. Use `docs/runbooks/design-system-management.md` before changing design tokens or importing Stitch output.
 12. Use `docs/runbooks/design-template-selection.md` before applying a ready-made design preset.
 13. Use `docs/runbooks/sub-agent-management.md` before coordinating delegated sub-agent work.
-14. Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` before production infrastructure work.
-15. Use `docs/checklists/new-project.md` when instantiating a derived project.
+14. Use `docs/runbooks/obsidian-context.md` before exporting or promoting Obsidian context.
+15. Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` before production infrastructure work.
+16. Use `docs/checklists/new-project.md` when instantiating a derived project.
 
 ## Repository Map
 
@@ -61,6 +63,7 @@ Applications created from this workbench are expected to be hosted on AWS. The c
 ├── .codex/                  # Codex skills and examples
 ├── .skills/                 # Optional SkillKit manifests and metadata
 ├── .github/                 # PR and issue workflows
+├── context/                 # Optional local context integrations
 ├── docs/
 │   ├── adr/                 # Architecture decision records
 │   ├── architecture/        # System maps and diagrams
@@ -106,6 +109,7 @@ Every project built from this template should define:
 - DESIGN.md tokens and UX rules for UI work
 - Versioned prompts and evals for important AI behavior
 - Bounded sub-agent execution plans when parallel work is useful
+- Reviewed context exports when Obsidian is used
 - Secrets, cost, and IaC governance when infrastructure is touched
 - Fast local checks
 - Production readiness criteria
@@ -125,6 +129,7 @@ Every project built from this template should define:
 - `docs/checklists/secrets-review.md`
 - `docs/checklists/cost-review.md`
 - `docs/checklists/sub-agent-review.md`
+- `docs/checklists/context-review.md`
 
 ## Optional SkillKit Workflow
 
@@ -143,6 +148,7 @@ Read `docs/runbooks/skill-management.md` before adding external skills.
 make help
 make check
 make doctor
+make context-check
 make design-templates
 make design-previews
 make skills-scan

@@ -26,3 +26,5 @@ coverage/
 .idea/
 .vscode/
 
+# Optional private Obsidian vaults should stay outside the repo.
+context/obsidian/vault/

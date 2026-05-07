@@ -18,6 +18,7 @@ Help turn AI project ideas into production-ready systems with clear specs, small
 - Treat secrets, credentials, proprietary prompts, and customer data as sensitive.
 - Treat external skills as third-party dependencies. Review and scan them before use.
 - Treat `DESIGN.md` as the canonical design system contract for UI work.
+- Treat Obsidian context as optional auxiliary context, not source of truth.
 - Assume production hosting is on AWS unless the user explicitly changes the constraint.
 - Propose AWS deployment products based on application needs and cost effectiveness, then wait for user validation before implementing infrastructure choices.
 - Assume DNS is managed through Cloudflare via API for every project domain.
@@ -134,6 +135,15 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Review and integrate sub-agent output before finalizing.
 - Do not delegate secrets, credentials, production infrastructure, Cloudflare DNS changes, GitHub releases, or user-validation decisions.
 
+## Context Rules
+
+- Use `context/README.md` and `docs/runbooks/obsidian-context.md` when Obsidian context is present.
+- The real Obsidian vault must live outside this public repository.
+- Do not import private notes automatically.
+- Do not treat Obsidian notes as accepted decisions unless promoted into specs, ADRs, prompts, or official docs.
+- Review and sanitize Obsidian exports before use.
+- Run `make context-check` after adding or changing exported context.
+
 ## Design System Rules
 
 - Read `DESIGN.md` before frontend or UX work.
@@ -157,6 +167,7 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Use `docs/runbooks/design-system-management.md` before changing design tokens or importing generated design rules.
 - Use `docs/runbooks/design-template-selection.md` before applying presets from `templates/design`.
 - Use `docs/runbooks/sub-agent-management.md` before coordinating delegated sub-agent work.
+- Use `docs/runbooks/obsidian-context.md` before exporting or promoting Obsidian context.
 - Use `docs/runbooks/iac-selection.md`, `docs/runbooks/secrets-management.md`, and `docs/runbooks/cost-governance.md` when infrastructure, secrets, or recurring cost are in scope.
 
 ## Review Checklist
@@ -176,6 +187,7 @@ Do not implement AWS infrastructure until the user validates the proposed option
 - Are recurring costs documented and justified?
 - Is the IaC tool choice documented and user-approved?
 - If sub-agents were used, was their scope reviewed and integrated safely?
+- If Obsidian context was used, was it reviewed and promoted into official docs?
 - Is the deployment path cost-effective for expected usage?
 - Is the diff smaller than it could reasonably be?
 
@@ -186,6 +198,7 @@ make bootstrap
 make check
 make doctor
 make new-project-check
+make context-check
 make design-templates
 make design-previews
 make skills-scan

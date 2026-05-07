@@ -1,4 +1,4 @@
-.PHONY: help bootstrap check doctor new-project-check design-templates design-previews apply-design skills-scan skills-recommend skills-list
+.PHONY: help bootstrap check doctor new-project-check context-check obsidian-export design-templates design-previews apply-design skills-scan skills-recommend skills-list
 
 help:
 	@echo "Available commands:"
@@ -6,6 +6,8 @@ help:
 	@echo "  make check               Validate template structure"
 	@echo "  make doctor              Check local tool availability"
 	@echo "  make new-project-check   Detect template values in derived projects"
+	@echo "  make context-check       Check exported context for publishing issues"
+	@echo "  make obsidian-export     Export reviewed local Obsidian context"
 	@echo "  make design-templates    List available DESIGN.md presets"
 	@echo "  make design-previews     Generate static HTML previews for design presets"
 	@echo "  make apply-design DESIGN=templates/design/saas-ops.DESIGN.md"
@@ -24,6 +26,12 @@ doctor:
 
 new-project-check:
 	./scripts/new-project-check.sh
+
+context-check:
+	./scripts/context/check-context-links.sh
+
+obsidian-export:
+	./scripts/context/export-obsidian-context.sh
 
 design-templates:
 	@find templates/design -name '*.DESIGN.md' -maxdepth 1 | sort
