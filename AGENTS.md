@@ -15,6 +15,7 @@ Help turn AI project ideas into production-ready systems with clear specs, small
 - Use `rg` and `rg --files` for repository exploration.
 - Use framework-native tooling once a stack is selected.
 - Add or update docs when behavior, architecture, or workflows change.
+- When writing French documentation or user-facing French text, use proper French accents and punctuation.
 - Treat secrets, credentials, proprietary prompts, and customer data as sensitive.
 - Treat external skills as third-party dependencies. Review and scan them before use.
 - Treat `DESIGN.md` as the canonical design system contract for UI work.
