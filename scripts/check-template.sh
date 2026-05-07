@@ -121,7 +121,12 @@ if [[ "$(sed -n '1p' "${ROOT_DIR}/DESIGN.md")" != "---" ]]; then
   exit 1
 fi
 
-if ! rg -n "^tokens:" "${ROOT_DIR}/DESIGN.md" >/dev/null 2>&1; then
+if ! awk '
+  NR == 1 && $0 == "---" { in_front_matter = 1; next }
+  NR > 1 && in_front_matter && $0 == "---" { exit found_tokens ? 0 : 1 }
+  in_front_matter && $0 ~ /^[[:space:]]*tokens:[[:space:]]*$/ { found_tokens = 1 }
+  END { if (!in_front_matter) exit 1 }
+' "${ROOT_DIR}/DESIGN.md"; then
   echo "DESIGN.md must include a tokens section in YAML front matter."
   exit 1
 fi
